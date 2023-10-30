@@ -1,0 +1,11 @@
+{
+  "name": "get-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@thirdweb-dev/sdk": "^4.0.7",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
