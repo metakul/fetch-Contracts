@@ -23,7 +23,7 @@ app.get("/fetchAllNFTs", async (req, res) => {
     });
 
     const contract = await sdk.getContract(
-      "0x6b2faBa274A09F6b64fd57b4367ee09aF7793A74"
+      "0xD60d302B936D3d9c56F5A0225EF9A191a7D12871"
     );
 
     const nfts = await contract.erc721.getAll();
@@ -84,7 +84,7 @@ app.get("/getNFTsForWallet/:walletAddress", async (req, res) => {
     });
 
     const contract = await sdk.getContract(
-      "0x6b2faBa274A09F6b64fd57b4367ee09aF7793A74"
+      "0xD60d302B936D3d9c56F5A0225EF9A191a7D12871"
     );
     // Load all NFTs
     const allNFTs = await contract.erc721.getAll();
@@ -111,10 +111,10 @@ app.get("/getstakedNFTsForWallet/:walletAddress", async (req, res) => {
     });
 
     const contract = await sdk.getContract(
-      "0x7d19bFc22fcF16bCDF4D89607a8D79994AD11f47"
+      "0x64C3c9841f2a6ad50C546392cEB24fDEfBb48d1B"
     );
     const nftContract = await sdk.getContract(
-      "0x6b2faBa274A09F6b64fd57b4367ee09aF7793A74"
+      "0xD60d302B936D3d9c56F5A0225EF9A191a7D12871"
     );
 
     const nftsOwnedByWallet = await contract.call("getStakeInfo", [
