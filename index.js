@@ -1,8 +1,10 @@
 const express = require("express");
 const { ThirdwebSDK } = require("@thirdweb-dev/sdk");
 const cors = require("cors");
-const Web3Utils = require("web3-utils");
+const dotenv = require('dotenv');
 
+
+dotenv.config()
 const app = express();
 const port = 8004; // You can choose a different port if needed
 
@@ -15,15 +17,20 @@ app.use(cors(corsOptions)); // Use the cors middleware with the specified option
 
 app.use(express.json());
 
+const thirdwebSecretKey=process.env.THIRDWEB_SECRET_KEY
+const ERC20Address=process.env.ERC20Address
+const ERC721Address=process.env.ERC721Address
+const StakingAddress=process.env.StakingAddress
+
 app.get("/fetchAllNFTs", async (req, res) => {
   try {
-    const sdk = new ThirdwebSDK("mumbai", {
+    const sdk = new ThirdwebSDK("polygon", {
       secretKey:
-        "U44uvKQJkQYLdnDdxHfBnjQDfG_mx6jUUulCvo2l9UyJGvqx2inzPu2EypIvVrnonMtAW_2h2Dn0Z3Rfux2LHg",
+        thirdwebSecretKey,
     });
 
     const contract = await sdk.getContract(
-      "0xD60d302B936D3d9c56F5A0225EF9A191a7D12871"
+      ERC721Address
     );
 
     const nfts = await contract.erc721.getAll();
@@ -37,13 +44,13 @@ app.get("/fetchTokenBalance/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
-    const sdk = new ThirdwebSDK("mumbai", {
+    const sdk = new ThirdwebSDK("polygon", {
       secretKey:
-        "U44uvKQJkQYLdnDdxHfBnjQDfG_mx6jUUulCvo2l9UyJGvqx2inzPu2EypIvVrnonMtAW_2h2Dn0Z3Rfux2LHg",
+        thirdwebSecretKey,
     });
 
     const contract = await sdk.getContract(
-      "0xD650834b4A40C58482F68320bC248eDe98D6506F"
+      ERC20Address
     );
 
     const balance = await contract.erc20.balanceOf(walletAddress);
@@ -57,13 +64,13 @@ app.get("/fetchERC20TokenBalance/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
-    const sdk = new ThirdwebSDK("mumbai", {
+    const sdk = new ThirdwebSDK("polygon", {
       secretKey:
-        "U44uvKQJkQYLdnDdxHfBnjQDfG_mx6jUUulCvo2l9UyJGvqx2inzPu2EypIvVrnonMtAW_2h2Dn0Z3Rfux2LHg",
+        thirdwebSecretKey,
     });
 
     const contract = await sdk.getContract(
-      "0xD650834b4A40C58482F68320bC248eDe98D6506F"
+      ERC20Address
     );
 
     const balance = await contract.erc20.balanceOf(walletAddress);
@@ -78,23 +85,19 @@ app.get("/getNFTsForWallet/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
-    const sdk = new ThirdwebSDK("mumbai", {
+    const sdk = new ThirdwebSDK("polygon", {
       secretKey:
-        "U44uvKQJkQYLdnDdxHfBnjQDfG_mx6jUUulCvo2l9UyJGvqx2inzPu2EypIvVrnonMtAW_2h2Dn0Z3Rfux2LHg",
+        thirdwebSecretKey,
     });
 
     const contract = await sdk.getContract(
-      "0xD60d302B936D3d9c56F5A0225EF9A191a7D12871"
+      ERC721Address
     );
     // Load all NFTs
-    const allNFTs = await contract.erc721.getAll();
+    const nfts = await contract.erc721.getOwned(walletAddress);
 
-    // Get the NFTs owned by the specified wallet address
-    const nftsOwnedByWallet = allNFTs.filter(
-      (nft) => nft.owner.toLowerCase() === walletAddress.toLowerCase()
-    );
 
-    res.json(nftsOwnedByWallet);
+    res.json(nfts);
   } catch (error) {
     console.error("Error fetching NFTs for wallet:", error);
     res.status(500).json({ error: error });
@@ -105,16 +108,16 @@ app.get("/getstakedNFTsForWallet/:walletAddress", async (req, res) => {
     const walletAddress = req.params.walletAddress;
     console.log(walletAddress)
 
-    const sdk = new ThirdwebSDK("mumbai", {
+    const sdk = new ThirdwebSDK("polygon", {
       secretKey:
-        "U44uvKQJkQYLdnDdxHfBnjQDfG_mx6jUUulCvo2l9UyJGvqx2inzPu2EypIvVrnonMtAW_2h2Dn0Z3Rfux2LHg",
+        thirdwebSecretKey,
     });
 
     const contract = await sdk.getContract(
-      "0x64C3c9841f2a6ad50C546392cEB24fDEfBb48d1B"
+      StakingAddress
     );
     const nftContract = await sdk.getContract(
-      "0xD60d302B936D3d9c56F5A0225EF9A191a7D12871"
+      ERC721Address
     );
 
     const nftsOwnedByWallet = await contract.call("getStakeInfo", [
@@ -161,7 +164,7 @@ app.post("/getNFTByTokenId", async (req, res) => {
     const tokenId = req.body.tokenId; // Assuming the request body contains a tokenId field
     const sdk = new ThirdwebSDK("polygon", {
       secretKey:
-        "U44uvKQJkQYLdnDdxHfBnjQDfG_mx6jUUulCvo2l9UyJGvqx2inzPu2EypIvVrnonMtAW_2h2Dn0Z3Rfux2LHg",
+        thirdwebSecretKey,
     });
 
     const contract = await sdk.getContract(
