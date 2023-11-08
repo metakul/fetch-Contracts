@@ -21,11 +21,11 @@ const thirdwebSecretKey=process.env.THIRDWEB_SECRET_KEY
 const ERC20Address=process.env.ERC20Address
 const ERC721Address=process.env.ERC721Address
 const StakingAddress=process.env.StakingAddress
-const NETWORK=process.env.NETWORK
+const network=process.env.network
 
 app.get("/fetchAllNFTs", async (req, res) => {
   try {
-    const sdk = new ThirdwebSDK(NETWORK, {
+    const sdk = new ThirdwebSDK("mumbai", {
       secretKey:
         thirdwebSecretKey,
     });
@@ -45,7 +45,7 @@ app.get("/fetchTokenBalance/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
-    const sdk = new ThirdwebSDK(NETWORK, {
+    const sdk = new ThirdwebSDK("mumbai", {
       secretKey:
         thirdwebSecretKey,
     });
@@ -65,7 +65,7 @@ app.get("/fetchERC20TokenBalance/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
-    const sdk = new ThirdwebSDK(NETWORK, {
+    const sdk = new ThirdwebSDK("mumbai", {
       secretKey:
         thirdwebSecretKey,
     });
@@ -86,7 +86,7 @@ app.get("/getNFTsForWallet/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
-    const sdk = new ThirdwebSDK(NETWORK, {
+    const sdk = new ThirdwebSDK("mumbai", {
       secretKey:
         thirdwebSecretKey,
     });
@@ -109,7 +109,7 @@ app.get("/getstakedNFTsForWallet/:walletAddress", async (req, res) => {
     const walletAddress = req.params.walletAddress;
     console.log(walletAddress)
 
-    const sdk = new ThirdwebSDK(NETWORK, {
+    const sdk = new ThirdwebSDK("mumbai", {
       secretKey:
         thirdwebSecretKey,
     });
@@ -163,7 +163,7 @@ console.log(totalReward); // This will be the total reward as a normal number
 app.post("/getNFTByTokenId", async (req, res) => {
   try {
     const tokenId = req.body.tokenId; // Assuming the request body contains a tokenId field
-    const sdk = new ThirdwebSDK(NETWORK, {
+    const sdk = new ThirdwebSDK("mumbai", {
       secretKey:
         thirdwebSecretKey,
     });
