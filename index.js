@@ -17,11 +17,12 @@ app.use(cors(corsOptions)); // Use the cors middleware with the specified option
 
 app.use(express.json());
 
-const thirdwebSecretKey=process.env.THIRDWEB_SECRET_KEY
+const thirdwebSecretKey=process.env.THIRDWEB_SECRET_KEY.toString()
 const ERC20Address=process.env.ERC20Address
 const ERC721Address=process.env.ERC721Address
 const StakingAddress=process.env.StakingAddress
-const network=process.env.network
+console.log(thirdwebSecretKey,ERC721Address,ERC721Address)
+
 
 app.get("/fetchAllNFTs", async (req, res) => {
   try {
