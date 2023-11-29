@@ -2,11 +2,18 @@ const express = require("express");
 const { ThirdwebSDK } = require("@thirdweb-dev/sdk");
 const cors = require("cors");
 const dotenv = require('dotenv');
+const  { Alchemy, Network } =require( "alchemy-sdk")
 
 
 dotenv.config()
 const app = express();
 const port = 8004; // You can choose a different port if needed
+const config = {
+  apiKey: "7xx7HGiKLrbuqtY0kD8vDSlF5MZTEIkC",
+  network: Network.ETH_MAINNET,
+};
+const alchemy = new Alchemy(config);
+
 
 // Middleware to parse JSON request bodies
 const corsOptions = {
@@ -84,6 +91,22 @@ app.get("/fetchERC20TokenBalance/:walletAddress", async (req, res) => {
 });
 
 app.get("/getNFTsForWallet/:walletAddress", async (req, res) => {
+  try {
+    const walletAddress = req.params.walletAddress;
+    // Get NFTs for the specified owner
+    
+    const nfts = await alchemy.nft.getNftsForOwner(walletAddress);
+    console.log(nfts)
+
+    // Send the NFTs as a JSON response
+    res.json({ nfts });
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+app.get("/getNFTsForWallet/thirdweb/:walletAddress", async (req, res) => {
   try {
     const walletAddress = req.params.walletAddress;
 
